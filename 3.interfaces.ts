@@ -107,3 +107,103 @@ interface NotOkay {
 	[x: number]: Dog;
 	[x: string]: Animal;
 }
+
+interface ReadonlyStringArray {
+	readonly [index: number]: string;
+}
+
+let tmpArray1: ReadonlyStringArray = ['Lee', 'Jessy'];
+
+// tmpArray1[2] = 'Error'
+
+// Class Types
+
+interface ClockInterface {
+	currentTime: Date;
+	setTime(d: Date): void;
+}
+
+class Clock implements ClockInterface {
+	currentTime: Date;
+
+	constructor(h: number, m: number) {
+		this.currentTime = new Date();
+	}
+
+	setTime(d: Date) {
+		this.currentTime = d;
+	}
+}
+
+// 設置檢查 constructor type on object creater
+interface ClockCnstructor {
+	new (h: number, m: number): ClockInterface;
+}
+
+function createClock(ctor: ClockCnstructor, h: number, m: number): ClockInterface {
+	return new ctor(h, m);
+}
+
+let tmpClck = createClock(Clock, 10, 11);
+
+// Extending Interfaces
+
+interface Shape {
+	color: string;
+}
+
+interface PenStroke {
+	penWidth: number;
+}
+
+interface Square extends Shape, PenStroke {
+	sideLength: number;
+}
+
+let Square = <Square>{};
+Square.color = 'blue';
+Square.sideLength = 2;
+Square.penWidth = 5.0;
+
+// Hybrid Types
+
+interface Counter {
+	(start: number): string;
+	interval: number;
+	reset(): void;
+}
+
+function getCounter(): Counter {
+	let counter = <Counter>function(start: number) {
+		return `${start}`;
+	};
+
+	counter.interval = 123;
+	counter.reset = function() {};
+
+	return counter;
+}
+
+// Interfaces extending classes
+
+class Control {
+	private state: any;
+}
+
+interface SelectableCountrol extends Control {
+	select(): void;
+}
+
+class Button extends Control implements SelectableCountrol {
+	select() {}
+}
+
+class TextBox extends Control {
+	select() {}
+}
+
+// Error private state 只能在 Control object
+// class Image2 implements SelectableCountrol {
+// 	private state: any;
+// 	select() {}
+// }
