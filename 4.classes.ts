@@ -223,7 +223,7 @@ class Greeter1 {
 	}
 
 	greet(): string {
-		return 'hello' + this.greet;
+		return 'hello' + this.greeting;
 	}
 }
 
